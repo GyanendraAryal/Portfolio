@@ -1,4 +1,43 @@
-export const smoothReveal = {
-  hidden: { opacity: 0, y: 80 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.8 } }
+export const fadeIn = (direction = 'up', delay = 0) => {
+  return {
+    hidden: {
+      y: direction === 'up' ? 40 : direction === 'down' ? -40 : 0,
+      x: direction === 'left' ? 40 : direction === 'right' ? -40 : 0,
+      opacity: 0,
+    },
+    show: {
+      y: 0,
+      x: 0,
+      opacity: 1,
+      transition: {
+        type: 'spring',
+        duration: 1.2,
+        delay: delay,
+        ease: [0.25, 0.25, 0.25, 0.75],
+      },
+    },
+  };
+};
+
+export const staggerContainer = (staggerChildren = 0.1, delayChildren = 0) => {
+  return {
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: staggerChildren,
+        delayChildren: delayChildren,
+      },
+    },
+  };
+};
+
+export const hoverTilt = {
+  hover: {
+    scale: 1.05,
+    y: -5,
+    transition: {
+      duration: 0.3,
+      ease: "easeInOut"
+    }
+  }
 };
