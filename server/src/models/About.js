@@ -5,6 +5,9 @@ const aboutSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  avatarUrl: {
+    type: String,
+  },
   resumeUrl: {
     type: String,
   },
