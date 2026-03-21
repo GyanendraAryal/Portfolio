@@ -1,5 +1,8 @@
 import express from 'express';
 import cors from 'cors';
+import helmet from 'helmet';
+import morgan from 'morgan';
+import rateLimit from 'express-rate-limit';
 
 import authRoutes from './src/routes/authRoutes.js';
 import projectRoutes from './src/routes/projectRoutes.js';
@@ -8,11 +11,32 @@ import aboutRoutes from './src/routes/aboutRoutes.js';
 import experienceRoutes from './src/routes/experienceRoutes.js';
 import messageRoutes from './src/routes/messageRoutes.js';
 
+import { notFound, errorHandler } from './src/middlewares/errorMiddleware.js';
+
 const app = express();
 
-// Middleware
-app.use(cors());
+// Security Middlewares
+app.use(helmet());
+app.use(cors({
+  origin: process.env.NODE_ENV === 'production' 
+    ? process.env.FRONTEND_URL 
+    : '*',
+  credentials: true
+}));
 app.use(express.json());
+
+// Logging
+if (process.env.NODE_ENV !== 'production') {
+  app.use(morgan('dev'));
+}
+
+// Rate Limiting
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  message: 'Too many requests from this IP, please try again after 15 minutes',
+});
+app.use('/api', limiter);
 
 // Routes
 app.use('/api/auth', authRoutes);
@@ -26,13 +50,8 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'API is running' });
 });
 
-// Error handling middleware
-app.use((err, req, res, next) => {
-  const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
-  res.status(statusCode).json({
-    message: err.message,
-    stack: process.env.NODE_ENV === 'production' ? null : err.stack,
-  });
-});
+// Centralized Error Handling
+app.use(notFound);
+app.use(errorHandler);
 
 export default app;
