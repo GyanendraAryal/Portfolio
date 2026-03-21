@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import api from '../api/api';
 
 const useFetch = (url) => {
@@ -6,22 +6,24 @@ const useFetch = (url) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     setLoading(true);
     try {
       const response = await api.get(url);
       setData(response.data);
       setError(null);
     } catch (err) {
-      setError(err.response?.data?.message || err.message);
+      const errorMessage = err.response?.data?.message || err.message || 'Something went wrong';
+      setError(errorMessage);
+      console.error(`Fetch Error [${url}]:`, err);
     } finally {
       setLoading(false);
     }
-  };
+  }, [url]);
 
   useEffect(() => {
     fetchData();
-  }, [url]);
+  }, [fetchData]);
 
   return { data, loading, error, refetch: fetchData };
 };
