@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect } from 'react';
-import api from '../api/api';
+import toast from 'react-hot-toast';
+import authService from '../services/authService';
 
 export const AuthContext = createContext();
 
@@ -8,30 +9,34 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const userInfo = localStorage.getItem('userInfo');
+    const userInfo = authService.getUserInfo();
     if (userInfo) {
-      setUser(JSON.parse(userInfo));
+      setUser(userInfo);
     }
     setLoading(false);
   }, []);
 
   const login = async (username, password) => {
     try {
-      const { data } = await api.post('/auth/login', { username, password });
+      const data = await authService.login(username, password);
       setUser(data);
-      localStorage.setItem('userInfo', JSON.stringify(data));
+      authService.setUserInfo(data);
+      toast.success('Session Initialized: Welcome, Architect');
       return { success: true };
     } catch (error) {
+      const message = error.response?.data?.message || 'Authentication Failed';
+      toast.error(message);
       return { 
         success: false, 
-        message: error.response?.data?.message || 'Login failed' 
+        message
       };
     }
   };
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('userInfo');
+    authService.logout();
+    toast.success('Session Terminated Safely');
   };
 
   return (
