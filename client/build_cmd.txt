@@ -1,0 +1,17 @@
+[36mvite v7.3.1 [32mbuilding client environment for production...[36m[39m
+transforming...
+[32m✓[39m 7 modules transformed.
+[31m✗[39m Build failed in 154ms
+[31merror during build:
+[31m[@tailwindcss/vite:generate:build] Cannot apply unknown utility class `glass`[31m
+file: [36mC:/Users/Gyanendra/Desktop/Portfolio/client/src/index.css[31m
+    at onInvalidCandidate (file:///C:/Users/Gyanendra/Desktop/Portfolio/client/node_modules/tailwindcss/dist/chunk-F4544Y4M.mjs:21:1511)
+    at $e (file:///C:/Users/Gyanendra/Desktop/Portfolio/client/node_modules/tailwindcss/dist/chunk-F4544Y4M.mjs:16:36740)
+    at file:///C:/Users/Gyanendra/Desktop/Portfolio/client/node_modules/tailwindcss/dist/chunk-F4544Y4M.mjs:21:355
+    at Cr (file:///C:/Users/Gyanendra/Desktop/Portfolio/client/node_modules/tailwindcss/dist/chunk-F4544Y4M.mjs:3:1733)
+    at _ (file:///C:/Users/Gyanendra/Desktop/Portfolio/client/node_modules/tailwindcss/dist/chunk-F4544Y4M.mjs:3:1377)
+    at Ce (file:///C:/Users/Gyanendra/Desktop/Portfolio/client/node_modules/tailwindcss/dist/chunk-F4544Y4M.mjs:21:172)
+    at Zi (file:///C:/Users/Gyanendra/Desktop/Portfolio/client/node_modules/tailwindcss/dist/chunk-F4544Y4M.mjs:38:294)
+    at async ua (file:///C:/Users/Gyanendra/Desktop/Portfolio/client/node_modules/tailwindcss/dist/chunk-F4544Y4M.mjs:38:631)
+    at async yf (file:///C:/Users/Gyanendra/Desktop/Portfolio/client/node_modules/tailwindcss/dist/chunk-F4544Y4M.mjs:38:1406)
+    at async uu (file:///C:/Users/Gyanendra/Desktop/Portfolio/client/node_modules/@tailwindcss/node/dist/index.mjs:10:3457)[39m
