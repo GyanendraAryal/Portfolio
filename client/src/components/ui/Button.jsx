@@ -1,28 +1,40 @@
+import { forwardRef } from 'react';
 import { motion } from 'framer-motion';
-import { twMerge } from 'tailwind-merge';
+import { cn } from '../../lib/utils';
+import { Loader2 } from 'lucide-react';
 
-const Button = ({ children, onClick, variant = 'primary', className, disabled, type = 'button', ...props }) => {
-  const baseClasses = 'px-6 py-2.5 rounded-lg font-medium transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm';
+const Button = forwardRef(({ className, variant = 'default', size = 'default', children, isLoading, disabled, ...props }, ref) => {
+  const baseStyles = 'inline-flex items-center justify-center rounded-lg font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:pointer-events-none disabled:opacity-50';
   
   const variants = {
-    primary: 'bg-accent text-white hover:bg-accent/80',
-    outline: 'border-2 border-accent text-accent hover:bg-accent hover:text-white',
-    ghost: 'text-text hover:text-accent hover:bg-surface',
+    default: 'bg-white text-black hover:bg-white/90 shadow-sm',
+    accent: 'bg-accent text-white hover:bg-accent-hover shadow-lg shadow-accent/20',
+    outline: 'border border-border bg-transparent hover:bg-surface-hover text-primary',
+    ghost: 'hover:bg-surface-hover text-primary',
+  };
+
+  const sizes = {
+    default: 'h-10 px-4 py-2',
+    sm: 'h-9 px-3',
+    lg: 'h-12 px-8 text-lg',
+    icon: 'h-10 w-10',
   };
 
   return (
     <motion.button
-      whileHover={{ scale: disabled ? 1 : 1.05 }}
-      whileTap={{ scale: disabled ? 1 : 0.95 }}
-      type={type}
-      onClick={onClick}
-      disabled={disabled}
-      className={twMerge(baseClasses, variants[variant], className)}
+      ref={ref}
+      whileHover={{ scale: disabled || isLoading ? 1 : 1.02 }}
+      whileTap={{ scale: disabled || isLoading ? 1 : 0.98 }}
+      className={cn(baseStyles, variants[variant], sizes[size], className)}
+      disabled={disabled || isLoading}
       {...props}
     >
+      {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
       {children}
     </motion.button>
   );
-};
+});
+
+Button.displayName = 'Button';
 
 export default Button;
