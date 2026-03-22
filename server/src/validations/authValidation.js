@@ -6,7 +6,7 @@ export const loginSchema = z.object({
 });
 
 export const registerSchema = loginSchema.extend({
-  // Add registration specific fields if any
+  registrationToken: z.string().optional(),
 });
 
 export const validateLogin = (data) => loginSchema.parse(data);
