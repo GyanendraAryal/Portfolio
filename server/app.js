@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
+import compression from 'compression';
 import rateLimit from 'express-rate-limit';
 
 import authRoutes from './src/routes/authRoutes.js';
@@ -15,8 +16,9 @@ import { notFound, errorHandler } from './src/middlewares/errorMiddleware.js';
 
 const app = express();
 
-// Security Middlewares
+// Security & Optimization Middlewares
 app.use(helmet());
+app.use(compression());
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' 
     ? process.env.FRONTEND_URL 
