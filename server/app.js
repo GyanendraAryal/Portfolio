@@ -48,7 +48,7 @@ app.use('/api/about', aboutRoutes);
 app.use('/api/experience', experienceRoutes);
 app.use('/api/messages', messageRoutes);
 
-app.get('/api/health', (req, res) => {
+app.get('/healthz', (req, res) => {
   res.json({ status: 'ok', message: 'API is running' });
 });
 
