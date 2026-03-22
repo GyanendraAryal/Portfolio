@@ -5,7 +5,7 @@ import { validateLogin, validateRegister } from '../validations/authValidation.j
 
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: '30d',
+    expiresIn: '24h',
   });
 };
 
@@ -33,8 +33,16 @@ export const loginAdmin = asyncHandler(async (req, res) => {
 // @route   POST /api/auth/register
 // @access  Public (Should be protected or disabled in production)
 export const registerAdmin = asyncHandler(async (req, res) => {
-  const { username, password } = validateRegister(req.body);
+  const { username, password, registrationToken } = validateRegister(req.body);
   
+  // Security: Block public registration in production unless a secret token is provided
+  if (process.env.NODE_ENV === 'production') {
+    if (!process.env.ADMIN_REGISTRATION_TOKEN || registrationToken !== process.env.ADMIN_REGISTRATION_TOKEN) {
+      res.status(403);
+      throw new Error('Public registration is disabled in production.');
+    }
+  }
+
   const userExists = await User.findOne({ username });
 
   if (userExists) {
