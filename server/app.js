@@ -1,3 +1,4 @@
+console.log("🔥 HEALTH ROUTE VERSION LOADED");
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
